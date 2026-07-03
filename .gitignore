@@ -1,21 +1,19 @@
-# ===== 不需要部署的文件 =====
-main.py
-同步更新.bat
-*.xlsx
-index - 副本.html
-
-# ===== Python 缓存 =====
+# === 忽略本地缓存与临时文件 ===
 __pycache__/
 *.pyc
 *.pyo
-
-# ===== 系统文件 =====
 .DS_Store
 Thumbs.db
 desktop.ini
-
-# ===== IDE 配置 =====
 .vscode/
 .idea/
 *.swp
 *.swo
+
+# === 忽略 Excel 源文件 (隐私) ===
+*.xlsx
+~$*
+
+# === 忽略工具文件 (你要求的) ===
+main.py
+同步更新.bat
