@@ -2033,7 +2033,7 @@
                 return { url: `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(trimUrl)}&show_text=0&width=500` };
             }
             if (trimUrl.includes('instagram.com')) {
-                const base = trimUrl.split('?')[0].replace(/\/$/, '');
+                const base = trimUrl.split('?')[0].replace(/\/$/, ''); 
                 return { url: `${base}/embed/` };
             }
             if (trimUrl.includes('tiktok.com')) {
