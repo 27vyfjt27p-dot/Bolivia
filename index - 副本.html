@@ -1,0 +1,2107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+    <title>Starphone - Catálogo Premium</title>
+
+    <meta property="og:title" content="Starphone - Catálogo Premium">
+    <meta property="og:description" content="Consulta nuestro catálogo actualizado.">
+    <meta property="og:image" content="https://starphone.cl/wp-content/uploads/2025/02/cropped-cropped-3-e1767369334585.jpg">
+    <meta property="og:image:width" content="300">
+    <meta property="og:image:height" content="300">
+    <meta property="og:type" content="website">
+    <link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAMAAABF0y+mAAAAk1BMVEVHcEwrwro00so00ck00sotxb000ck00ck00ckmp6E00soktKwhr6c108s00ck00ckZj4kbl5Aks6s00ckQaWQakYsks6sKSEUakowks6sks6sPZWEPZmEakowgp6Aks6sLUEwPZ2IakowKTUkPZ2IakYsakYsktKwakYsKS0cSa2YQaWQQaWQQaGMJS0YQaWQLTEh7hPogAAAAMXRSTlMAEFTfZhy8OP8EfHNbrPR3Zij40pOlmE29/9U7noVHt3h87mC45ptl/yUW/u7ICmCH8NindAAAAKtJREFUeAFiGHjAiEeOiRmfTkAzY43FMBBEsW+eDZmZmeH+lwu0hj5q9SRRulSygmsEutSiAplIPnWMJwZ2o9P2/ni+VA6QTpymG3gRmSI7mVr23YF0E4jUg3Qtj/nBXQITzUMbRlqcBL7vp4+Tb5YXAPR76vvBQZZVXDeaDoBrpYO0Qq/ouq62Nf0w7svoVyWxV8fD8TuO4zRbC87IWLjmK84ptwGXLD3+gQ85MAr2UWxdtwAAAABJRU5ErkJggg==" type="image/png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* ===== 全局重置与变量 ===== */
+        :root {
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #0f172a;
+            --border: #f1f5f9;
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --danger: #ef4444;
+            --success: #22c55e;
+            --radius: 1.5rem;
+            --shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+        }
+
+        body.dark {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --text: #f8fafc;
+            --border: #334155;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            margin: 0 !important;
+            padding: 0 !important;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            transition: background 0.3s ease, color 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
+            overflow-x: hidden;
+        }
+
+        /* ===== 滚动条美化 ===== */
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* ===== 玻璃态头部 ===== */
+        .glass-header {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+        }
+        body.dark .glass-header {
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        /* ===== 产品卡片 ===== */
+        .product-card {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+        }
+        body.dark .product-card:hover {
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        /* ===== 图片容器 ===== */
+        .image-container {
+            position: relative;
+            width: 100%;
+            padding-top: 100%;
+            background: linear-gradient(135deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.8s infinite;
+            overflow: hidden;
+            cursor: zoom-in;
+            border-radius: var(--radius) var(--radius) 0 0;
+        }
+        body.dark .image-container {
+            background: linear-gradient(135deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+        }
+        @keyframes shimmer {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+        .image-container img {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 88%;
+            max-height: 88%;
+            object-fit: contain;
+            transition: transform 0.4s ease;
+            z-index: 1;
+        }
+        @media (min-width: 1024px) {
+            .image-container:hover img {
+                transform: translate(-50%, -50%) scale(1.08);
+            }
+        }
+
+        /* ===== 角标 ===== */
+        .badge {
+            position: absolute;
+            z-index: 10;
+            font-size: 9px;
+            font-weight: 800;
+            padding: 3px 10px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-transform: uppercase;
+        }
+        .badge-new {
+            top: 10px;
+            right: 10px;
+            background: var(--primary);
+            color: #fff;
+        }
+        .badge-sealed {
+            top: 10px;
+            right: 10px;
+            background: var(--success);
+            color: #fff;
+        }
+        .badge-activated {
+            top: 10px;
+            right: 10px;
+            background: #f59e0b;
+            color: #fff;
+        }
+
+        /* ===== 收藏按钮 ===== */
+        .fav-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 20;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        body.dark .fav-btn {
+            background: rgba(30, 41, 59, 0.9);
+            border-color: #475569;
+        }
+        .fav-btn:hover {
+            transform: scale(1.1);
+        }
+        .fav-btn.active {
+            background: #fee2e2;
+            border-color: #fca5a5;
+        }
+        body.dark .fav-btn.active {
+            background: #7f1d1d;
+            border-color: #991b1b;
+        }
+
+        /* ===== 产品标题 ===== */
+        .product-title {
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--text);
+            cursor: pointer;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .product-title:hover {
+            color: var(--primary);
+        }
+        body.dark .product-title {
+            color: #f1f5f9;
+        }
+
+        /* ===== 价格区域 ===== */
+        .price-section {
+            margin-top: auto;
+            padding: 0.6rem 0 0.2rem 0;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .price-amount {
+            font-size: 1.1rem;
+            font-weight: 900;
+            color: var(--text);
+        }
+        body.dark .price-amount {
+            color: #f8fafc;
+        }
+
+        /* ===== 箱规标签 ===== */
+        .box-tag {
+            font-size: 9px;
+            font-weight: 700;
+            padding: 2px 10px;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .box-tag-blue {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+        .box-tag-red {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        .box-tag-green {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+        body.dark .box-tag-blue {
+            background: #1e3a5f;
+            color: #60a5fa;
+        }
+        body.dark .box-tag-red {
+            background: #7f1d1d;
+            color: #f87171;
+        }
+        body.dark .box-tag-green {
+            background: #14532d;
+            color: #4ade80;
+        }
+
+        /* ===== 数量控制器 ===== */
+        .qty-control {
+            display: flex;
+            align-items: center;
+            background: var(--bg);
+            border-radius: 12px;
+            padding: 2px;
+            border: 1px solid var(--border);
+        }
+        body.dark .qty-control {
+            background: #0f172a;
+            border-color: #334155;
+        }
+        .qty-control button {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: transparent;
+            color: var(--text);
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .qty-control button:hover {
+            background: var(--primary);
+            color: #fff;
+        }
+        .qty-control input {
+            width: 40px;
+            text-align: center;
+            font-weight: 800;
+            font-size: 0.85rem;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--text);
+        }
+        body.dark .qty-control input {
+            color: #f8fafc;
+        }
+
+        /* ===== 详情悬浮窗 ===== */
+        .detail-tooltip {
+            position: relative;
+            width: 100%;
+        }
+        .detail-content {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            top: 100%;
+            left: -10px;
+            right: -10px;
+            background: rgba(15, 23, 42, 0.96);
+            backdrop-filter: blur(12px);
+            color: #fff;
+            padding: 20px;
+            border-radius: 1.2rem;
+            font-size: 12px;
+            line-height: 1.7;
+            z-index: 1000;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transform: translateY(8px);
+            transition: all 0.25s ease;
+            pointer-events: none;
+        }
+        .detail-content.active {
+            visibility: visible !important;
+            opacity: 1 !important;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+        .product-card.top-z {
+            z-index: 50 !important;
+        }
+        @media (max-width: 768px) {
+            .detail-content {
+                position: fixed !important;
+                top: 50% !important;
+                left: 50% !important;
+                right: auto !important;
+                width: 88% !important;
+                max-height: 60vh !important;
+                transform: translate(-50%, -50%) !important;
+                z-index: 9999 !important;
+                border-radius: 1.5rem !important;
+            }
+            .detail-content.active {
+                transform: translate(-50%, -50%) !important;
+            }
+        }
+
+        /* ===== 筛选药丸 ===== */
+        .active-filters-row {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 8px 0 12px 0;
+            flex-wrap: wrap;
+        }
+        .filter-pill {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 5px 12px;
+            font-size: 11px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+            color: var(--text);
+        }
+        .filter-pill-remove {
+            background: none;
+            border: none;
+            font-size: 14px;
+            cursor: pointer;
+            color: #94a3b8;
+            padding: 0 2px;
+            transition: color 0.2s;
+        }
+        .filter-pill-remove:hover {
+            color: var(--danger);
+        }
+
+        /* ===== 收藏模式横幅 ===== */
+        .favorite-banner {
+            background: linear-gradient(135deg, #fef2f2, #fee2e2);
+            border-radius: 16px;
+            padding: 10px 16px;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #fecaca;
+        }
+        body.dark .favorite-banner {
+            background: linear-gradient(135deg, #450a0a, #7f1d1d);
+            border-color: #991b1b;
+        }
+
+        /* ===== 购物车悬浮条 ===== */
+        #cart-bar {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 40;
+            width: calc(100% - 32px);
+            max-width: 480px;
+        }
+        #cart-bar .cart-inner {
+            background: var(--card);
+            border: 1px solid var(--border);
+            padding: 14px 20px;
+            border-radius: 3rem;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.15);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        body.dark #cart-bar .cart-inner {
+            background: #1e293b;
+            border-color: #334155;
+        }
+        #cart-bar .cart-inner:hover {
+            transform: scale(1.02);
+        }
+
+        /* ===== 购物车模态框 ===== */
+        #cart-modal {
+            position: fixed;
+            z-index: 2000;
+            background: var(--card);
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 -10px 60px rgba(0, 0, 0, 0.15);
+            bottom: 0;
+            left: 0;
+            right: 0;
+            border-radius: 2rem 2rem 0 0;
+            max-height: 85vh;
+            overflow: hidden;
+            transform: translateY(100%);
+        }
+        #cart-modal.active {
+            transform: translateY(0);
+        }
+        @media (min-width: 768px) {
+            #cart-modal {
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: auto;
+                width: 420px;
+                max-height: none;
+                border-radius: 2rem 0 0 2rem;
+                transform: translateX(100%);
+            }
+            #cart-modal.active {
+                transform: translateX(0);
+            }
+        }
+        body.dark #cart-modal {
+            background: #1e293b;
+        }
+        #cart-items-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            background: var(--bg);
+        }
+        body.dark #cart-items-list {
+            background: #0f172a;
+        }
+
+        /* ===== 筛选菜单 ===== */
+        #filter-menu {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 320px;
+            background: var(--card);
+            box-shadow: -8px 0 40px rgba(0, 0, 0, 0.12);
+            z-index: 3000;
+            padding: 24px 20px;
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        #filter-menu.open {
+            transform: translateX(0);
+        }
+        body.dark #filter-menu {
+            background: #1e293b;
+        }
+        #filter-content {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        /* ===== 页脚 ===== */
+        .site-footer {
+            background: #73c2b8;
+            padding: 30px 20px 20px 20px;
+            margin-top: 30px;
+            width: 100%;
+        }
+        .footer-logo img {
+            height: 80px;
+            display: block;
+            margin: 0 auto 16px auto;
+            filter: brightness(0) invert(1);
+        }
+        .footer-grid {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            max-width: 900px;
+            margin: 0 auto;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+        .footer-grid .left {
+            flex: 2;
+            min-width: 200px;
+        }
+        .footer-grid .right {
+            flex: 1;
+            min-width: 140px;
+            text-align: right;
+        }
+        .footer-grid h4 {
+            color: #ffffff !important;
+            font-weight: 800;
+            font-size: 1rem;
+            margin-bottom: 8px;
+        }
+        .footer-grid p,
+        .footer-grid .copyright {
+            color: #ffffff !important;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            opacity: 0.95;
+        }
+        .social-links {
+            display: flex;
+            gap: 16px;
+            justify-content: flex-end;
+            margin-top: 8px;
+        }
+        .social-links svg {
+            width: 26px;
+            height: 26px;
+            fill: #ffffff !important;
+            transition: transform 0.2s;
+        }
+        .social-links a:hover svg {
+            transform: scale(1.1);
+        }
+        @media (max-width: 768px) {
+            .footer-grid {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                gap: 24px;
+            }
+            .footer-grid .right {
+                text-align: center;
+            }
+            .social-links {
+                justify-content: center;
+            }
+        }
+
+        /* ===== 灯箱 ===== */
+        #modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1500;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(8px);
+        }
+        #modal-overlay.show {
+            display: flex;
+        }
+        #lightbox-img {
+            max-width: 92%;
+            max-height: 85vh;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+            cursor: zoom-in;
+        }
+        #lightbox-img.zoomed {
+            transform: scale(1.6);
+            cursor: zoom-out;
+        }
+        .close-lightbox {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            width: 48px;
+            height: 48px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            color: white;
+            font-size: 24px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 2200;
+            transition: background 0.3s;
+        }
+        .close-lightbox:hover {
+            background: rgba(0, 0, 0, 0.8);
+        }
+        .close-lightbox.show {
+            display: flex;
+        }
+
+        /* ===== 视频模态框 ===== */
+        #videoModal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.92);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+        #videoModal.show {
+            display: flex;
+        }
+        #videoModal .video-wrapper {
+            position: relative;
+            width: 92%;
+            max-width: 800px;
+            background: #000;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        #videoModal .video-wrapper iframe {
+            width: 100%;
+            height: 60vh;
+            border: none;
+        }
+        @media (max-width: 768px) {
+            #videoModal .video-wrapper iframe {
+                height: 50vh;
+            }
+        }
+        .video-close {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background 0.3s;
+        }
+        .video-close:hover {
+            background: rgba(0, 0, 0, 0.8);
+        }
+        .wa-share-btn {
+            display: block;
+            margin: 12px auto;
+            padding: 12px;
+            background: #25D366;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            width: 85%;
+            font-weight: 700;
+            text-align: center;
+            font-size: 15px;
+            transition: opacity 0.3s;
+        }
+        .wa-share-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* ===== 通告横幅 ===== */
+        #update-announcement {
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-40px);
+            z-index: 5000;
+            width: calc(100% - 32px);
+            max-width: 480px;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        #update-announcement.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+            pointer-events: auto;
+        }
+
+        /* ===== 响应式：移动端卡片横向布局 ===== */
+        @media (max-width: 768px) {
+            .product-grid {
+                grid-template-columns: 1fr !important;
+                gap: 10px !important;
+            }
+            .product-card {
+                flex-direction: row !important;
+                height: auto !important;
+                padding: 10px !important;
+                align-items: center;
+                border-radius: 1rem !important;
+            }
+            .image-container {
+                width: 80px !important;
+                height: 80px !important;
+                padding-top: 0 !important;
+                border-radius: 0.75rem !important;
+                flex-shrink: 0;
+                margin-right: 12px !important;
+            }
+            .info-container {
+                flex: 1 !important;
+                padding: 0 !important;
+                min-width: 0;
+            }
+            .controls-container {
+                flex-shrink: 0 !important;
+                padding-left: 8px !important;
+            }
+            .price-section {
+                padding: 4px 0 !important;
+            }
+            .price-amount {
+                font-size: 0.95rem !important;
+            }
+            .qty-control button {
+                width: 28px !important;
+                height: 28px !important;
+                font-size: 16px !important;
+            }
+            .qty-control input {
+                width: 32px !important;
+                font-size: 0.8rem !important;
+            }
+            .product-title {
+                font-size: 0.75rem !important;
+            }
+            .badge {
+                font-size: 7px !important;
+                padding: 2px 8px !important;
+            }
+            .fav-btn {
+                width: 28px !important;
+                height: 28px !important;
+                font-size: 13px !important;
+                top: 6px !important;
+                left: 6px !important;
+            }
+        }
+
+        /* ===== 工具类 ===== */
+        .transition-all {
+            transition: all 0.3s ease;
+        }
+        .truncate-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .gap-1 {
+            gap: 4px;
+        }
+        .gap-2 {
+            gap: 8px;
+        }
+        .gap-3 {
+            gap: 12px;
+        }
+        .gap-4 {
+            gap: 16px;
+        }
+
+        /* ===== 筛选按钮活跃指示 ===== */
+        #filter-btn.filter-active::after {
+            content: "";
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 10px;
+            height: 10px;
+            background: #fbbf24;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+        body.dark #filter-btn.filter-active::after {
+            border-color: #1e293b;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== 通告横幅 ===== -->
+    <div id="update-announcement">
+        <div class="bg-white/90 dark:bg-slate-800/95 backdrop-blur-xl border border-white/20 p-4 rounded-3xl shadow-2xl flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="flex-shrink-0 w-10 h-10 bg-slate-900 rounded-2xl flex items-center justify-center">
+                    <svg class="h-5 w-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                    </svg>
+                </div>
+                <h4 id="announcement-text" class="text-sm font-black uppercase tracking-wider text-slate-900 dark:text-white">CATALOGO ACTUALIZADO</h4>
+            </div>
+            <button onclick="hideAnnouncement()" class="w-8 h-8 flex items-center justify-center bg-slate-100 dark:bg-slate-700 rounded-full text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">✕</button>
+        </div>
+    </div>
+
+    <!-- ===== 头部 ===== -->
+    <header class="glass-header sticky top-0 z-40 px-4 py-3 lg:px-8 border-b border-slate-100 dark:border-slate-800">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-3">
+            <div class="flex items-center cursor-pointer flex-shrink-0" onclick="location.reload()">
+                <img src="https://starphone.cl/wp-content/uploads/2025/02/cropped-cropped-3-e1767369334585.jpg" alt="Starphone" class="h-8 w-auto object-contain rounded-lg">
+            </div>
+
+            <div class="flex-1 flex items-center gap-2 max-w-md">
+                <input type="text" id="search" oninput="handleKeywordInput()" placeholder="Buscar productos..." class="w-full px-4 py-2.5 bg-slate-100 dark:bg-slate-800 rounded-2xl outline-none text-sm border-none text-slate-900 dark:text-white placeholder:text-slate-400">
+            </div>
+
+            <button id="filter-btn" onclick="vibrate(); toggleMenu()" class="p-2.5 bg-slate-900 dark:bg-slate-700 text-white rounded-xl shadow-lg active:scale-90 transition-all duration-300 relative">
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h10M4 18h16" />
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- ===== 主内容 ===== -->
+    <main class="max-w-7xl mx-auto px-4 py-4 lg:px-8">
+        <div id="source-tabs" class="flex flex-nowrap gap-2 mb-3 overflow-x-auto pb-2 no-scrollbar"></div>
+        <div id="active-filters-row" class="active-filters-row" style="display:none;"></div>
+        <div id="grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 product-grid"></div>
+    </main>
+
+    <!-- ===== 页脚 ===== -->
+    <footer class="site-footer">
+        <div class="footer-logo">
+            <img src="https://starphone.cl/wp-content/uploads/2025/12/cropped-cropped-3.png" alt="Starphone">
+        </div>
+        <div class="footer-grid">
+            <div class="left">
+                <h4>Starphone</h4>
+                <p>Desde 2013, hemos transformado la forma en que los usuarios acceden a la tecnología. Somos uno de los principales distribuidores de smartphones y productos electrónicos, con presencia en el mercado mayorista y minorista.</p>
+            </div>
+            <div class="right">
+                <h4>Redes Sociales</h4>
+                <div class="social-links">
+                    <a href="https://www.facebook.com/starphoneinternational/" target="_blank" aria-label="Facebook">
+                        <svg viewBox="0 0 24 24"><path d="M18.77,7.46H14.5v-1.9c0-.9.6-1.1,1-1.1h3V.5h-4.33C10.24.5,9.5,3.44,9.5,5.32v2.14h-3v4h3v12h5v-12h3.85Z"/></svg>
+                    </a>
+                    <a href="https://www.instagram.com/starphone_oficial/" target="_blank" aria-label="Instagram">
+                        <svg viewBox="0 0 24 24"><path d="M12,2.16c3.2,0,3.58,0,4.85.07,3.25.15,4.77,1.69,4.92,4.92.06,1.27.07,1.65.07,4.85s0,3.58-.07,4.85c-.15,3.23-1.66,4.77-4.92,4.92-1.27.06-1.64.07-4.85.07s-3.58,0-4.85-.07c-3.26-.15-4.77-1.7-4.92-4.92-.06-1.27-.07-1.64-.07-4.85s0-3.58.07-4.85C2.38,3.92,3.9,2.38,7.15,2.23,8.42,2.17,8.8,2.16,12,2.16ZM12,0C8.74,0,8.33,0,7.05.07c-4.27.2-6.78,2.71-7,7C0,8.33,0,8.74,0,12s0,3.67.07,4.95c.2,4.27,2.71,6.78,7,7,1.28.06,1.69.07,4.95.07s3.67,0,4.95-.07c4.27-.2,6.78-2.71,7-7C24,15.67,24,15.26,24,12s0-3.67-.07-4.95c-.2-4.27-2.71-6.78-7-7C15.67,0,15.26,0,12,0Zm0,5.84A6.16,6.16,0,1,0,18.16,12,6.16,6.16,0,0,0,12,5.84ZM12,16a4,4,0,1,1,4-4A4,4,0,0,1,12,16ZM18.41,4.15a1.44,1.44,0,1,0,1.44,1.44A1.44,1.44,0,0,0,18.41,4.15Z"/></svg>
+                    </a>
+                </div>
+                <p class="copyright mt-2">&copy; 2026 Starphone</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ===== 购物车悬浮条 ===== -->
+    <div id="cart-bar" class="hidden">
+        <div class="cart-inner" onclick="vibrate(); toggleCartModal()">
+            <div>
+                <span id="cart-info" class="text-2xl font-black text-blue-600 dark:text-blue-400">0</span>
+                <span id="cart-total-bar" class="text-xl font-bold text-slate-900 dark:text-white ml-2">$0.00</span>
+            </div>
+            <div class="bg-blue-600 px-5 py-2.5 rounded-2xl text-sm font-black text-white uppercase">Ver Pedido</div>
+        </div>
+    </div>
+
+    <!-- ===== 购物车模态框 ===== -->
+    <div id="cart-modal">
+        <div class="p-5 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center shrink-0">
+            <div class="flex items-center gap-3">
+                <h2 class="text-xl font-black text-slate-900 dark:text-white uppercase">Mi Pedido</h2>
+                <button onclick="clearCart()" class="text-[10px] font-bold text-red-500 border border-red-200 dark:border-red-800 px-3 py-1.5 rounded-full uppercase hover:bg-red-50 dark:hover:bg-red-900/30 transition-all">Vaciar 🗑️</button>
+            </div>
+            <button onclick="closeAllModals()" class="w-10 h-10 flex items-center justify-center bg-slate-100 dark:bg-slate-800 rounded-full text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">✕</button>
+        </div>
+
+        <div id="cart-items-list" class="flex-1 overflow-y-auto p-4 space-y-3"></div>
+
+        <div class="p-5 bg-white dark:bg-slate-800 border-t border-slate-100 dark:border-slate-700 shrink-0">
+            <div class="flex justify-between items-center mb-4 px-2">
+                <span class="text-slate-500 font-bold uppercase text-[10px] tracking-widest">Total:</span>
+                <span id="cart-total-modal" class="text-2xl font-black text-slate-900 dark:text-white">$0.00</span>
+            </div>
+
+            <div class="flex flex-col gap-2">
+                <div class="flex gap-2">
+                    <button onclick="generateOrderPoster(event)" class="flex-1 bg-white dark:bg-slate-700 border-2 border-slate-900 dark:border-slate-600 text-slate-900 dark:text-white py-2.5 rounded-2xl font-black uppercase text-[9px] flex items-center justify-center gap-2 hover:bg-slate-900 hover:text-white dark:hover:bg-slate-600 transition-all active:scale-95 shadow-sm">
+                        📸 <span>Generar Imagen</span>
+                    </button>
+                    <div class="grid grid-cols-3 gap-1 bg-slate-100 dark:bg-slate-700 p-1 rounded-2xl w-auto shrink-0">
+                        <button id="btn-contact-0" onclick="selectContact(0)" class="py-1.5 px-3 rounded-xl text-[10px] font-black transition-all bg-blue-600 text-white shadow-sm">AXIN</button>
+                        <button id="btn-contact-1" onclick="selectContact(1)" class="py-1.5 px-3 rounded-xl text-[10px] font-bold transition-all bg-transparent text-slate-400 dark:text-slate-500">IVAN</button>
+                        <button id="btn-contact-2" onclick="selectContact(2)" class="py-1.5 px-3 rounded-xl text-[10px] font-bold transition-all bg-transparent text-slate-400 dark:text-slate-500">MARIA</button>
+                    </div>
+                </div>
+                <button onclick="sendWhatsApp()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black uppercase shadow-lg text-sm hover:bg-blue-700 transition-all active:scale-[0.98]">
+                    Enviar WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 筛选菜单 ===== -->
+    <div id="filter-menu">
+        <div class="flex justify-between items-center mb-6 border-b border-slate-100 dark:border-slate-700 pb-4">
+            <div>
+                <h2 class="text-xl font-black text-slate-900 dark:text-white uppercase leading-none">Filtros</h2>
+                <button onclick="resetFilters()" class="text-[10px] font-black text-blue-600 uppercase mt-1">Limpiar Todo</button>
+            </div>
+            <button onclick="closeAllModals()" class="text-slate-400 font-bold text-xl hover:text-slate-900 dark:hover:text-white transition-all">✕</button>
+        </div>
+
+        <div class="mb-6 p-5 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-700">
+            <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Configuración</h3>
+            <button onclick="downloadProductCatalogPDF()" class="w-full mb-4 bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-2xl font-black uppercase text-[10px] flex items-center justify-center gap-2 shadow-lg transition-all active:scale-95">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                </svg>
+                <span>Descargar PDF (Sin Precios)</span>
+            </button>
+            <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-600 dark:text-slate-300">Modo Oscuro</span>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="dark-mode-toggle" onchange="toggleDarkMode()" class="sr-only peer">
+                        <div class="w-10 h-5 bg-slate-200 dark:bg-slate-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                    </label>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-600 dark:text-slate-300">Vibración</span>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="vibration-toggle" onchange="toggleVibration()" checked class="sr-only peer">
+                        <div class="w-10 h-5 bg-slate-200 dark:bg-slate-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div id="filter-content" class="space-y-5 overflow-y-auto flex-1 no-scrollbar"></div>
+
+        <button onclick="closeAllModals()" class="mt-4 w-full bg-slate-900 dark:bg-blue-600 text-white py-4 rounded-xl font-bold uppercase text-sm active:scale-95 transition-all">Ver Resultados</button>
+    </div>
+
+    <!-- ===== 灯箱遮罩 ===== -->
+    <div id="modal-overlay" onclick="closeAllModals()">
+        <button id="lightbox-close-btn" class="close-lightbox" onclick="event.stopPropagation(); closeAllModals()">✕</button>
+        <img id="lightbox-img" src="" onclick="event.stopPropagation(); this.classList.toggle('zoomed')">
+    </div>
+
+    <!-- ===== 视频模态框 ===== -->
+    <div id="videoModal" onclick="closeVideoModal()">
+        <div class="video-wrapper" onclick="event.stopPropagation()">
+            <button class="video-close" onclick="closeVideoModal()">✕</button>
+            <iframe id="videoFrame" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe>
+            <a id="waShareBtn" href="#" target="_blank" class="wa-share-btn">📱 Compartir por WhatsApp</a>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        //  CONFIGURACIÓN
+        // ============================================================
+        const CONTACTS = [
+            { name: "AXIN", phone: "56926108498" },
+            { name: "IVAN", phone: "59168043587" },
+            { name: "MARIA", phone: "56944611255" },
+        ];
+
+        // ============================================================
+        //  ESTADO GLOBAL
+        // ============================================================
+        let products = [];
+        let cart = {};
+        let productNotes = {};
+        let favorites = {};
+        let sources = [];
+        let currentSourceKey = null;
+        let isFavoriteMode = false;
+        let activeContactIndex = 0;
+        let isVibrationEnabled = localStorage.getItem('vibration_enabled') !== 'false';
+
+        const activeFilters = {
+            keyword: "",
+            MARCA: null,
+            CATEGORIA: null,
+            TIPO: null,
+            priceRange: null
+        };
+
+        // ============================================================
+        //  UTILIDADES
+        // ============================================================
+        function vibrate() {
+            if (isVibrationEnabled && navigator.vibrate) {
+                navigator.vibrate(12);
+            }
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        function handleImgError(img) {
+            img.onerror = null;
+            img.src = "https://via.placeholder.com/300?text=Starphone";
+        }
+
+        function getBoxTagHtml(boxValue) {
+            const val = String(boxValue || '').trim();
+            if (val === '' || val.toUpperCase() === 'D') return '';
+
+            if (val.toLowerCase().includes('ultimo') || val.toLowerCase().includes('último')) {
+                return `<span class="box-tag box-tag-red">⚠️ ${val}</span>`;
+            }
+            if (val.toUpperCase().includes('POR CAJA')) {
+                return `<span class="box-tag box-tag-blue">📦 1 CAJA: ${val.replace(/POR CAJA/gi, '').trim()}</span>`;
+            }
+            if (/^\d+$/.test(val)) {
+                return `<span class="box-tag box-tag-green">📦 ${val} unid/caja</span>`;
+            }
+            return `<span class="box-tag box-tag-red">${val}</span>`;
+        }
+
+        function getBadgeHtml(product) {
+            const badges = [];
+            if (product['新到货'] && product['新到货'] === 'NUEVO') {
+                badges.push('<span class="badge badge-new">NUEVO</span>');
+            }
+            if (product.PRODUCTO && product.PRODUCTO.toUpperCase().includes('SELLADO')) {
+                badges.push('<span class="badge badge-sealed">SELLADO</span>');
+            }
+            if (product.PRODUCTO && product.PRODUCTO.toUpperCase().includes('ACTIVADO')) {
+                badges.push('<span class="badge badge-activated">ACTIVADO</span>');
+            }
+            return badges.join('');
+        }
+
+        // ============================================================
+        //  LOCALSTORAGE
+        // ============================================================
+        function saveToLocal() {
+            const allCarts = JSON.parse(localStorage.getItem('starphone_carts_v2') || '{}');
+            const allNotes = JSON.parse(localStorage.getItem('starphone_notes_v2') || '{}');
+            allCarts[currentSourceKey] = cart;
+            allNotes[currentSourceKey] = productNotes;
+            localStorage.setItem('starphone_carts_v2', JSON.stringify(allCarts));
+            localStorage.setItem('starphone_notes_v2', JSON.stringify(allNotes));
+            localStorage.setItem('starphone_favs', JSON.stringify(favorites));
+        }
+
+        function loadFromLocal() {
+            favorites = JSON.parse(localStorage.getItem('starphone_favs') || '{}');
+            if (localStorage.getItem('starphone_dark') === 'true') {
+                document.body.classList.add('dark');
+            }
+            const allCarts = JSON.parse(localStorage.getItem('starphone_carts_v2') || '{}');
+            const allNotes = JSON.parse(localStorage.getItem('starphone_notes_v2') || '{}');
+            if (currentSourceKey) {
+                cart = allCarts[currentSourceKey] || {};
+                productNotes = allNotes[currentSourceKey] || {};
+            }
+            const dmt = document.getElementById('dark-mode-toggle');
+            if (dmt) dmt.checked = document.body.classList.contains('dark');
+            const vt = document.getElementById('vibration-toggle');
+            if (vt) vt.checked = isVibrationEnabled;
+        }
+
+        // ============================================================
+        //  PRODUCTOS
+        // ============================================================
+        async function loadProducts() {
+            try {
+                const src = sources.find(s => s.key === currentSourceKey);
+                if (!src) return;
+                const cacheBuster = `?v=${new Date().getTime()}`;
+                const res = await fetch(src.file + cacheBuster);
+                const raw = await res.json();
+                products = raw.map((p) => ({ ...p, id: p.PRODUCTO }));
+                resetFilters(false);
+                renderFilters();
+                render();
+                updateActiveFiltersPills();
+                updateFilterIconStatus();
+                selectContact(0);
+            } catch (e) {
+                console.error("Error loading products:", e);
+            }
+        }
+
+        async function init() {
+            if (!localStorage.getItem('app_version_v3')) {
+                localStorage.clear();
+                localStorage.setItem('app_version_v3', '1.0');
+                location.reload();
+                return;
+            }
+
+            loadFromLocal();
+
+            try {
+                const res = await fetch('sources.json?v=' + new Date().getTime());
+                sources = await res.json();
+                if (sources.length > 0) {
+                    currentSourceKey = sources[0].key;
+                    const allCarts = JSON.parse(localStorage.getItem('starphone_carts_v2') || '{}');
+                    const allNotes = JSON.parse(localStorage.getItem('starphone_notes_v2') || '{}');
+                    cart = allCarts[currentSourceKey] || {};
+                    productNotes = allNotes[currentSourceKey] || {};
+                    await loadProducts();
+                    renderSourceTabs();
+                }
+            } catch (e) {
+                console.error("Init error:", e);
+            }
+
+            // 加载通知
+            fetch('notice.txt?v=' + new Date().getTime())
+                .then(r => {
+                    if (!r.ok) throw new Error('No notice');
+                    return r.text();
+                })
+                .then(text => {
+                    if (text && text.trim() !== '') {
+                        const el = document.getElementById('update-announcement');
+                        const textEl = document.getElementById('announcement-text');
+                        if (textEl) textEl.innerHTML = text.replace(/\n/g, '<br>');
+                        el.classList.add('show');
+                        setTimeout(() => {
+                            el.classList.remove('show');
+                        }, 8000);
+                    }
+                })
+                .catch(() => {});
+        }
+
+        // ============================================================
+        //  RENDER: TABS
+        // ============================================================
+        function renderSourceTabs() {
+            const container = document.getElementById('source-tabs');
+            let html = sources.map(s => {
+                const isActive = !isFavoriteMode && s.key === currentSourceKey;
+                return `<button onclick="vibrate(); isFavoriteMode=false; setSource('${s.key}')" 
+                               class="whitespace-nowrap px-5 py-2 rounded-2xl text-[11px] font-bold border-2 transition-all duration-200 
+                               ${isActive ? 'bg-slate-900 text-white border-slate-900 shadow-md' : 'bg-white dark:bg-slate-800 text-slate-400 dark:text-slate-500 border-slate-100 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-500'}">
+                               ${s.label}
+                        </button>`;
+            }).join('');
+
+            html += `<button onclick="vibrate(); isFavoriteMode=true; renderSourceTabs(); render();" 
+                             class="whitespace-nowrap px-5 py-2 rounded-2xl text-[11px] font-bold border-2 transition-all 
+                             ${isFavoriteMode ? 'bg-red-500 text-white border-red-500 shadow-md' : 'bg-white dark:bg-slate-800 text-red-400 border-red-100 dark:border-red-900/50 hover:border-red-300 dark:hover:border-red-700'}">
+                             FAVORITOS ❤️
+                      </button>`;
+            container.innerHTML = html;
+        }
+
+        function setSource(key) {
+            if (currentSourceKey === key && !isFavoriteMode) return;
+            saveToLocal();
+            currentSourceKey = key;
+            isFavoriteMode = false;
+            window.scrollTo(0, 0);
+            const allCarts = JSON.parse(localStorage.getItem('starphone_carts_v2') || '{}');
+            const allNotes = JSON.parse(localStorage.getItem('starphone_notes_v2') || '{}');
+            cart = allCarts[key] || {};
+            productNotes = allNotes[key] || {};
+            renderSourceTabs();
+            closeAllModals();
+            loadProducts();
+        }
+
+        // ============================================================
+        //  RENDER: FILTROS
+        // ============================================================
+        function renderFilters() {
+            const { keyword, MARCA, CATEGORIA, TIPO, priceRange } = activeFilters;
+            const marcas = [...new Set(products.map(p => p.MARCA).filter(Boolean))].sort();
+            const categorias = [...new Set(products.map(p => p.CATEGORIA).filter(Boolean))].sort();
+            const tipos = [...new Set(products.map(p => p.TIPO).filter(Boolean))].sort();
+
+            const createBtn = (list, type) => list.map(item => {
+                const isActive = activeFilters[type] === item;
+                const hasResults = products.some(p => {
+                    const matchKeyword = !keyword || (p.PRODUCTO + (p.MARCA || '') + (p.CATEGORIA || '') + (p.TIPO || ''))
+                        .toUpperCase().includes(keyword.toUpperCase());
+                    const matchPrice = checkPriceMatch(p);
+                    return matchKeyword && matchPrice &&
+                        (!activeFilters.MARCA || p.MARCA === activeFilters.MARCA) &&
+                        (!activeFilters.CATEGORIA || p.CATEGORIA === activeFilters.CATEGORIA) &&
+                        (!activeFilters.TIPO || p.TIPO === activeFilters.TIPO) &&
+                        p[type] === item;
+                });
+                const btnClass = isActive ?
+                    "bg-blue-600 text-white border-blue-600 shadow-lg scale-[1.02]" :
+                    (hasResults ?
+                        "bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-100 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-500" :
+                        "bg-slate-50 dark:bg-slate-800/50 text-slate-300 dark:text-slate-600 border-slate-50 dark:border-slate-800 opacity-50 cursor-not-allowed");
+                return `<button onclick="${hasResults || isActive ? `setFilter('${type}', '${item}')` : ''}" 
+                                class="w-full flex justify-between items-center px-4 py-3 rounded-xl border text-[11px] font-bold transition-all ${btnClass}">
+                                <span>${item}</span>${isActive ? '<span class="ml-2 text-[14px]">✕</span>' : ''}
+                        </button>`;
+            }).join('');
+
+            const priceRanges = [
+                { label: 'Bajo $50', value: 'under50' },
+                { label: '$50 - $200', value: '50to200' },
+                { label: 'Sobre $200', value: 'over200' }
+            ];
+            const priceBtns = priceRanges.map(item => {
+                const isActive = activeFilters.priceRange === item.value;
+                const btnClass = isActive ?
+                    "bg-blue-600 text-white border-blue-600 shadow-lg scale-[1.02]" :
+                    "bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-100 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-500";
+                return `<button onclick="setFilter('priceRange', '${item.value}')" 
+                                class="w-full flex justify-between items-center px-4 py-3 rounded-xl border text-[11px] font-bold transition-all ${btnClass}">
+                                <span>${item.label}</span>${isActive ? '<span class="ml-2 text-[14px]">✕</span>' : ''}
+                        </button>`;
+            }).join('');
+
+            let html = `
+                <div>
+                    <h3 class="text-emerald-600 dark:text-emerald-400 font-black text-[10px] uppercase tracking-widest mb-3 flex items-center gap-2">
+                        <span>Precios</span>
+                        <div class="h-[1px] flex-1 bg-emerald-100 dark:bg-emerald-900/20"></div>
+                    </h3>
+                    <div class="grid grid-cols-1 gap-1">${priceBtns}</div>
+                </div>
+            `;
+
+            if (categorias.length > 0) {
+                html += `
+                    <div class="mt-5">
+                        <h3 class="text-blue-600 dark:text-blue-400 font-black text-[10px] uppercase tracking-widest mb-3 flex items-center gap-2">
+                            <span>Categorías</span>
+                            <div class="h-[1px] flex-1 bg-blue-100 dark:bg-blue-900/20"></div>
+                        </h3>
+                        <div class="grid grid-cols-1 gap-1">${createBtn(categorias, 'CATEGORIA')}</div>
+                    </div>
+                `;
+            }
+            if (marcas.length > 0) {
+                html += `
+                    <div class="mt-5">
+                        <h3 class="text-indigo-600 dark:text-indigo-400 font-black text-[10px] uppercase tracking-widest mb-3 flex items-center gap-2">
+                            <span>Marcas</span>
+                            <div class="h-[1px] flex-1 bg-indigo-100 dark:bg-indigo-900/20"></div>
+                        </h3>
+                        <div class="grid grid-cols-1 gap-1">${createBtn(marcas, 'MARCA')}</div>
+                    </div>
+                `;
+            }
+            if (tipos.length > 0) {
+                html += `
+                    <div class="mt-5">
+                        <h3 class="text-slate-500 dark:text-slate-400 font-black text-[10px] uppercase tracking-widest mb-3 flex items-center gap-2">
+                            <span>Otros</span>
+                            <div class="h-[1px] flex-1 bg-slate-100 dark:bg-slate-800/20"></div>
+                        </h3>
+                        <div class="grid grid-cols-1 gap-1">${createBtn(tipos, 'TIPO')}</div>
+                    </div>
+                `;
+            }
+
+            document.getElementById('filter-content').innerHTML = html || "<p class='text-slate-400 text-xs font-bold uppercase'>No hay filtros disponibles</p>";
+        }
+
+        function checkPriceMatch(p) {
+            const price = parseFloat(p['Precio ( USD )']) || 0;
+            const range = activeFilters.priceRange;
+            if (range === 'under50') return price < 50;
+            if (range === '50to200') return price >= 50 && price <= 200;
+            if (range === 'over200') return price > 200;
+            return true;
+        }
+
+        function setFilter(type, val) {
+            vibrate();
+            if (activeFilters[type] === val) {
+                activeFilters[type] = null;
+            } else {
+                activeFilters[type] = val;
+            }
+            renderFilters();
+            render();
+            updateFilterIconStatus();
+            updateActiveFiltersPills();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function resetFilters(shouldRender = true) {
+            activeFilters.keyword = "";
+            activeFilters.MARCA = null;
+            activeFilters.CATEGORIA = null;
+            activeFilters.TIPO = null;
+            activeFilters.priceRange = null;
+            document.getElementById('search').value = "";
+            if (shouldRender) {
+                renderFilters();
+                render();
+            }
+            updateFilterIconStatus();
+            updateActiveFiltersPills();
+        }
+
+        function updateFilterIconStatus() {
+            const btn = document.getElementById('filter-btn');
+            const isFiltering = activeFilters.keyword !== "" ||
+                activeFilters.MARCA !== null ||
+                activeFilters.CATEGORIA !== null ||
+                activeFilters.TIPO !== null ||
+                activeFilters.priceRange !== null;
+            btn.classList.toggle('filter-active', isFiltering);
+        }
+
+        function updateActiveFiltersPills() {
+            const container = document.getElementById('active-filters-row');
+            if (!container) return;
+            const pills = [];
+
+            if (activeFilters.keyword && activeFilters.keyword.trim() !== '') {
+                pills.push(
+                    `<span class="filter-pill">🔍 ${escapeHtml(activeFilters.keyword)} <button class="filter-pill-remove" onclick="removeFilter('keyword')">✕</button></span>`
+                    );
+            }
+            if (activeFilters.MARCA) {
+                pills.push(
+                    `<span class="filter-pill">🏷️ ${escapeHtml(activeFilters.MARCA)} <button class="filter-pill-remove" onclick="removeFilter('MARCA')">✕</button></span>`
+                    );
+            }
+            if (activeFilters.CATEGORIA) {
+                pills.push(
+                    `<span class="filter-pill">📁 ${escapeHtml(activeFilters.CATEGORIA)} <button class="filter-pill-remove" onclick="removeFilter('CATEGORIA')">✕</button></span>`
+                    );
+            }
+            if (activeFilters.TIPO) {
+                pills.push(
+                    `<span class="filter-pill">📌 ${escapeHtml(activeFilters.TIPO)} <button class="filter-pill-remove" onclick="removeFilter('TIPO')">✕</button></span>`
+                    );
+            }
+            if (activeFilters.priceRange) {
+                const labels = { under50: 'Bajo $50', '50to200': '$50 - $200', over200: 'Sobre $200' };
+                pills.push(
+                    `<span class="filter-pill">💰 ${labels[activeFilters.priceRange]} <button class="filter-pill-remove" onclick="removeFilter('priceRange')">✕</button></span>`
+                    );
+            }
+
+            if (pills.length === 0) {
+                container.style.display = 'none';
+            } else {
+                container.style.display = 'flex';
+                container.innerHTML = pills.join('');
+            }
+        }
+
+        function removeFilter(filterType) {
+            vibrate();
+            if (filterType === 'keyword') {
+                activeFilters.keyword = '';
+                document.getElementById('search').value = '';
+            } else if (filterType === 'priceRange') {
+                activeFilters.priceRange = null;
+            } else {
+                activeFilters[filterType] = null;
+            }
+            renderFilters();
+            render();
+            updateActiveFiltersPills();
+            updateFilterIconStatus();
+        }
+
+        function handleKeywordInput() {
+            clearTimeout(window._searchTimeout);
+            window._searchTimeout = setTimeout(() => {
+                activeFilters.keyword = document.getElementById('search').value;
+                render();
+                renderFilters();
+                updateFilterIconStatus();
+                updateActiveFiltersPills();
+            }, 300);
+        }
+
+        // ============================================================
+        //  RENDER: PRODUCTOS
+        // ============================================================
+        function render() {
+            const { keyword, MARCA, CATEGORIA, TIPO, priceRange } = activeFilters;
+            const filtered = products.filter(p => {
+                if (isFavoriteMode && !favorites[p.id]) return false;
+                const matchKeyword = !keyword || (p.PRODUCTO + (p.MARCA || '') + (p.CATEGORIA || '') + (p.TIPO || '') + (p[
+                    '新到货'] || '')).toUpperCase().includes(keyword.toUpperCase());
+                const matchPrice = checkPriceMatch(p);
+                return matchKeyword && matchPrice &&
+                    (!MARCA || p.MARCA === MARCA) &&
+                    (!CATEGORIA || p.CATEGORIA === CATEGORIA) &&
+                    (!TIPO || p.TIPO === TIPO);
+            });
+
+            const grid = document.getElementById('grid');
+
+            // 收藏模式横幅
+            let banner = '';
+            if (isFavoriteMode) {
+                const favCount = Object.keys(favorites).length;
+                banner = `
+                    <div class="favorite-banner col-span-full">
+                        <span>❤️ <strong>MODO FAVORITOS</strong> · ${favCount} productos guardados</span>
+                        <button onclick="isFavoriteMode=false; renderSourceTabs(); render();" class="text-xs font-bold text-red-600 dark:text-red-400 bg-transparent border-none cursor-pointer">Salir ✕</button>
+                    </div>
+                `;
+            }
+
+            if (filtered.length === 0) {
+                grid.innerHTML = banner +
+                    `<div class="col-span-full py-16 text-center">
+                        <h3 class="text-lg font-black text-slate-900 dark:text-white uppercase">Sin resultados</h3>
+                        <button onclick="resetFilters()" class="mt-4 px-8 py-3 bg-slate-900 dark:bg-slate-700 text-white rounded-2xl font-bold text-xs uppercase shadow-lg">Limpiar filtros</button>
+                    </div>`;
+                updateCartBar();
+                return;
+            }
+
+            grid.innerHTML = banner + filtered.map(p => {
+                const q = cart[p.id] || 0;
+                const imgUrl = p.Imagen_Path ? encodeURI(p.Imagen_Path.replace(/\\/g, '/')) : '';
+                const boxTag = getBoxTagHtml(p['VIENE_LA_CAJA']);
+                const isFav = favorites[p.id] || false;
+
+                return `
+                    <div id="card-${p.id}" class="product-card shadow-sm">
+                        <button onclick="event.stopPropagation(); toggleFav('${p.id}')" class="fav-btn ${isFav ? 'active' : ''}">${isFav ? '❤️' : '🤍'}</button>
+                        
+                        <div class="image-container" onclick="openLightbox('${imgUrl}')">
+                            ${getBadgeHtml(p)}
+                            <img src="${imgUrl}" onerror="handleImgError(this)" loading="lazy" alt="${escapeHtml(p.PRODUCTO)}">
+                        </div>
+
+                        <div class="info-container p-4">
+                            <div class="product-details">
+                                <p class="text-[10px] font-bold text-indigo-500 dark:text-indigo-400 uppercase tracking-wider">${p.MARCA || ''}</p>
+                                <div class="detail-tooltip">
+                                    <h3 class="product-title" onclick="event.stopPropagation(); toggleDetail('${p.id}', false)" onmouseenter="toggleDetail('${p.id}', true)">
+                                        ${escapeHtml(p.PRODUCTO)}
+                                    </h3>
+                                    <div id="detail-${p.id}" class="detail-content no-scrollbar" onclick="event.stopPropagation()">
+                                        <div class="flex justify-between items-start mb-3 border-b border-white/10 pb-2">
+                                            <div class="font-black text-blue-400 uppercase text-[14px] leading-tight pr-4">${escapeHtml(p.PRODUCTO)}</div>
+                                            <button onclick="closeAllModals()" class="text-white bg-white/20 w-6 h-6 rounded-full flex items-center justify-center text-[10px]">✕</button>
+                                        </div>
+                                        <div class="text-[13px] leading-relaxed text-white">${escapeHtml(p.DESC_FULL || 'Sin descripción adicional.')}</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="price-section">
+                                <span class="price-amount">$${p['Precio ( USD )']}</span>
+                                ${boxTag}
+                            </div>
+                        </div>
+
+                        <div class="controls-container p-4 pt-0">
+                            ${p.video_url && p.video_url.trim() !== '' ? 
+                                `<button onclick="openVideoModal('${p.video_url}')" class="w-full bg-orange-600 text-white border-none py-1.5 rounded-xl cursor-pointer text-[11px] font-bold mb-2 hover:bg-orange-700 transition-all">▶️ Ver Video</button>` 
+                                : ''}
+                            
+                            <div class="qty-control">
+                                <button onclick="vibrate(); updateQty('${p.id}',-1)">−</button>
+                                <input type="number" value="${q}" onchange="setQty('${p.id}', this.value)" min="0">
+                                <button onclick="vibrate(); updateQty('${p.id}',1)">+</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            updateCartBar();
+            updateActiveFiltersPills();
+        }
+
+        // ============================================================
+        //  INTERACCIONES
+        // ============================================================
+        function toggleFav(id) {
+            vibrate();
+            if (favorites[id]) {
+                delete favorites[id];
+            } else {
+                favorites[id] = true;
+            }
+            localStorage.setItem('starphone_favs', JSON.stringify(favorites));
+            render();
+            if (isFavoriteMode) renderSourceTabs();
+        }
+
+        function toggleDetail(id, isHover) {
+            const el = document.getElementById(`detail-${id}`);
+            const card = document.getElementById(`card-${id}`);
+            if (!el || !card) return;
+            const isMobile = window.innerWidth <= 768;
+
+            if (isHover) {
+                if (!isMobile) {
+                    closeAllModals();
+                    card.classList.add('top-z');
+                    el.classList.add('active');
+                    card.onmouseleave = () => {
+                        el.classList.remove('active');
+                        card.classList.remove('top-z');
+                    };
+                }
+            } else {
+                if (isMobile) {
+                    const wasActive = el.classList.contains('active');
+                    closeAllModals();
+                    if (!wasActive) {
+                        el.classList.add('active');
+                        document.getElementById('modal-overlay').classList.add('show');
+                        document.body.style.overflow = 'hidden';
+                    }
+                }
+            }
+        }
+
+        function openLightbox(src) {
+            vibrate();
+            if (!src) return;
+            const img = document.getElementById('lightbox-img');
+            img.src = src;
+            img.classList.remove('zoomed');
+            document.getElementById('lightbox-close-btn').classList.add('show');
+            document.getElementById('modal-overlay').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function toggleMenu() {
+            vibrate();
+            const menu = document.getElementById('filter-menu');
+            menu.classList.toggle('open');
+            document.getElementById('modal-overlay').classList.toggle('show', menu.classList.contains('open'));
+        }
+
+        function closeAllModals() {
+            document.querySelectorAll('.detail-content').forEach(d => d.classList.remove('active'));
+            document.querySelectorAll('.product-card').forEach(c => c.classList.remove('top-z'));
+            document.getElementById('cart-modal').classList.remove('active');
+            document.getElementById('filter-menu').classList.remove('open');
+            document.getElementById('modal-overlay').classList.remove('show');
+            document.getElementById('lightbox-close-btn').classList.remove('show');
+            document.getElementById('lightbox-img').classList.remove('zoomed');
+            document.body.style.overflow = '';
+        }
+
+        // ============================================================
+        //  CARRITO
+        // ============================================================
+        function updateQty(id, chg) {
+            vibrate();
+            const n = (cart[id] || 0) + chg;
+            if (n <= 0) {
+                delete cart[id];
+                delete productNotes[id];
+            } else {
+                cart[id] = n;
+            }
+            saveToLocal();
+            render();
+            if (document.getElementById('cart-modal').classList.contains('active')) refreshCartModal();
+        }
+
+        function setQty(id, val) {
+            const n = parseInt(val);
+            if (isNaN(n) || n <= 0) {
+                delete cart[id];
+                delete productNotes[id];
+            } else {
+                cart[id] = n;
+            }
+            saveToLocal();
+            render();
+            if (document.getElementById('cart-modal').classList.contains('active')) refreshCartModal();
+        }
+
+        function updateProductNote(id, val) {
+            if (val && val.trim()) {
+                productNotes[id] = val.trim();
+            } else {
+                delete productNotes[id];
+            }
+            saveToLocal();
+        }
+
+        function toggleCartModal() {
+            const isActive = document.getElementById('cart-modal').classList.toggle('active');
+            document.getElementById('modal-overlay').classList.toggle('show', isActive);
+            if (isActive) refreshCartModal();
+            if (isActive) document.body.style.overflow = 'hidden';
+            else document.body.style.overflow = '';
+        }
+
+        function updateCartBar() {
+            let totalItems = 0,
+                totalPrice = 0;
+            for (const id in cart) {
+                const p = products.find(i => i.id === id);
+                if (p) {
+                    totalItems += cart[id];
+                    const price = parseFloat(p['Precio ( USD )']) || 0;
+                    totalPrice += price * cart[id];
+                }
+            }
+            const cartBar = document.getElementById('cart-bar');
+            cartBar.classList.toggle('hidden', totalItems === 0);
+            document.getElementById('cart-info').innerText = totalItems;
+            document.getElementById('cart-total-bar').innerText = `$${totalPrice.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+        }
+
+        function refreshCartModal() {
+            const list = document.getElementById('cart-items-list');
+            let html = '';
+
+            for (const id in cart) {
+                const p = products.find(i => i.id === id);
+                if (!p) {
+                    html += `
+                        <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700 opacity-60">
+                            <div class="flex items-center gap-3">
+                                <div class="flex-1">
+                                    <h4 class="text-[11px] font-bold text-slate-400 uppercase">${escapeHtml(id)}</h4>
+                                    <p class="text-[10px] font-black text-red-500 uppercase mt-1 italic">⚠️ NO DISPONIBLE</p>
+                                </div>
+                                <button onclick="vibrate(); setQty('${id}', 0)" class="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-full transition-colors">
+                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    continue;
+                }
+
+                const imgUrl = p.Imagen_Path ? encodeURI(p.Imagen_Path.replace(/\\/g, '/')) : '';
+                const boxTag = getBoxTagHtml(p['VIENE_LA_CAJA']);
+                const currentNote = productNotes[id] || '';
+
+                html += `
+                    <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700">
+                        <div class="flex items-center gap-3">
+                            <img src="${imgUrl}" class="w-14 h-14 rounded-lg object-contain bg-slate-50 dark:bg-slate-900" onerror="handleImgError(this)">
+                            <div class="flex-1 min-w-0">
+                                <h4 class="text-[11px] font-bold text-slate-800 dark:text-slate-200 break-words uppercase">${escapeHtml(p.PRODUCTO)}</h4>
+                                <div class="flex flex-wrap gap-1 mt-0.5">
+                                    ${p.PRODUCTO.toUpperCase().includes('SELLADO') ? '<span class="text-[8px] bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300 px-2 py-0.5 rounded font-black">SELLADO</span>' : ''}
+                                    ${p.PRODUCTO.toUpperCase().includes('ACTIVADO') ? '<span class="text-[8px] bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300 px-2 py-0.5 rounded font-black">ACTIVADO</span>' : ''}
+                                </div>
+                                <div class="flex items-center gap-2 mt-1">
+                                    <span class="text-blue-600 dark:text-blue-400 font-black">$${p['Precio ( USD )']}</span>
+                                    ${boxTag}
+                                </div>
+                                <textarea rows="2" 
+                                    placeholder="Color, almacenamiento, observaciones..."
+                                    oninput="updateProductNote('${id}', this.value)"
+                                    class="w-full mt-2 px-3 py-1.5 bg-slate-100 dark:bg-slate-900 border-none rounded-lg text-[10px] text-slate-600 dark:text-slate-400 outline-none focus:ring-1 focus:ring-blue-400 transition-all resize-vertical">${escapeHtml(currentNote)}</textarea>
+                            </div>
+
+                            <div class="flex items-center gap-2">
+                                <div class="qty-control">
+                                    <button onclick="updateQty('${id}',-1)">−</button>
+                                    <input type="number" value="${cart[id]}" onchange="setQty('${id}', this.value)" min="0">
+                                    <button onclick="updateQty('${id}',1)">+</button>
+                                </div>
+                                <button onclick="vibrate(); setQty('${id}', 0)" class="p-2 text-slate-300 hover:text-red-500 transition-colors">
+                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            list.innerHTML = html || "<p class='text-center py-16 text-slate-400 font-bold uppercase'>Tu lista está vacía</p>";
+            updateCartTotalDisplay();
+        }
+
+        function updateCartTotalDisplay() {
+            let total = 0;
+            for (const id in cart) {
+                const p = products.find(i => i.id === id);
+                if (p) {
+                    total += (parseFloat(p['Precio ( USD )']) || 0) * cart[id];
+                }
+            }
+            document.getElementById('cart-total-modal').innerText = `$${total.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+        }
+
+        function clearCart() {
+            if (!confirm('¿Estás seguro de que deseas vaciar todo el pedido?')) return;
+            vibrate();
+            cart = {};
+            productNotes = {};
+            saveToLocal();
+            render();
+            refreshCartModal();
+            updateCartBar();
+            setTimeout(() => closeAllModals(), 500);
+        }
+
+        // ============================================================
+        //  WHATSAPP
+        // ============================================================
+        function selectContact(i) {
+            vibrate();
+            activeContactIndex = i;
+            CONTACTS.forEach((_, idx) => {
+                const btn = document.getElementById(`btn-contact-${idx}`);
+                if (btn) {
+                    btn.className = idx === i ?
+                        "py-1.5 px-3 rounded-xl text-[10px] font-black transition-all bg-blue-600 text-white shadow-sm" :
+                        "py-1.5 px-3 rounded-xl text-[10px] font-bold transition-all bg-transparent text-slate-400 dark:text-slate-500";
+                }
+            });
+        }
+
+        function sendWhatsApp() {
+            vibrate();
+            const contact = CONTACTS[activeContactIndex];
+            if (!contact) return;
+
+            const groups = { 'STARPHONE': [], 'QUE VIVO': [], 'OTROS': [] };
+            let grandTotal = 0;
+
+            for (const id in cart) {
+                const p = products.find(i => i.id === id);
+                if (p) {
+                    const sub = (parseFloat(p['Precio ( USD )']) || 0) * cart[id];
+                    grandTotal += sub;
+                    const tag = String(p['qcy-yf'] || '').toUpperCase().trim();
+                    const itemData = { p, sub, qty: cart[id], note: productNotes[id] || '' };
+
+                    if (tag === 'STARPHONE' || tag.includes('YF')) {
+                        groups['STARPHONE'].push(itemData);
+                    } else if (tag === 'QUE VIVO' || tag.includes('QCY')) {
+                        groups['QUE VIVO'].push(itemData);
+                    } else {
+                        groups['OTROS'].push(itemData);
+                    }
+                }
+            }
+
+            let msg = '';
+            let globalItemCount = 1;
+            const groupOrder = ['STARPHONE', 'QUE VIVO', 'OTROS'];
+
+            groupOrder.forEach(name => {
+                const items = groups[name];
+                if (items.length > 0) {
+                    msg += `⭐ *NUEVO PEDIDO ${name}*\n`;
+                    msg += `--------------------------\n`;
+                    items.forEach(item => {
+                        msg += `*item ${globalItemCount}.* *${item.p.PRODUCTO}*\n`;
+                        if (item.note) msg += `_Nota: ${item.note}_\n`;
+                        msg += `Cant: ${item.qty} | Sub: *$${item.sub.toFixed(2)}*\n`;
+                        globalItemCount++;
+                    });
+                    msg += `--------------------------\n\n`;
+                }
+            });
+
+            msg += `💰 *TOTAL PEDIDO: $${grandTotal.toFixed(2)}*`;
+            window.open(`https://wa.me/${contact.phone}?text=${encodeURIComponent(msg)}`);
+        }
+
+        // ============================================================
+        //  GENERAR IMAGEN DEL PEDIDO
+        // ============================================================
+        async function generateOrderPoster(event) {
+            vibrate();
+            if (Object.keys(cart).length === 0) return alert('El carrito está vacío');
+
+            const btn = event.currentTarget;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = 'Generando...';
+            btn.disabled = true;
+
+            const poster = document.createElement('div');
+            poster.style.cssText =
+                "position:fixed; left:-9999px; width:500px; background:white; padding:40px; font-family:'Plus Jakarta Sans',sans-serif;";
+
+            let itemsHtml = '';
+            let total = 0;
+            for (const id in cart) {
+                const p = products.find(i => i.id === id);
+                if (p) {
+                    const sub = (parseFloat(p['Precio ( USD )']) || 0) * cart[id];
+                    total += sub;
+                    const note = productNotes[id] || '';
+                    itemsHtml += `
+                        <div style="display:flex; justify-content:space-between; border-bottom:1px solid #f1f5f9; padding:15px 0; align-items:center;">
+                            <div style="flex:1; padding-right:20px;">
+                                <div style="font-weight:800; font-size:14px; color:#0f172a; text-transform:uppercase; line-height:1.2; margin-bottom:4px;">${escapeHtml(p.PRODUCTO)}</div>
+                                <div style="font-size:12px; color:#64748b;">
+                                    <span style="background:#f1f5f9; padding:2px 6px; border-radius:4px; font-weight:700; color:#0f172a;">${cart[id]} UNI</span> x $${p['Precio ( USD )']} ${note ? `<span style="color:#2563eb; margin-left:8px;">[${escapeHtml(note)}]</span>` : ''}
+                                </div>
+                            </div>
+                            <div style="font-weight:900; font-size:16px; color:#0f172a; white-space:nowrap;">$${sub.toFixed(2)}</div>
+                        </div>
+                    `;
+                }
+            }
+
+            poster.innerHTML = `
+                <div style="border-bottom:5px solid #0f172a; padding-bottom:20px; margin-bottom:25px; display:flex; justify-content:space-between; align-items:flex-end;">
+                    <div>
+                        <h1 style="font-size:36px; font-weight:900; font-style:italic; color:#0f172a; margin:0; letter-spacing:-1px;">STARPHONE</h1>
+                        <p style="font-size:12px; font-weight:800; color:#2563eb; margin:4px 0 0 0; text-transform:uppercase; letter-spacing:2px;">Confirmación de Pedido</p>
+                    </div>
+                    <div style="text-align:right; font-size:11px; color:#64748b; font-weight:600;">${new Date().toLocaleDateString()}</div>
+                </div>
+                <div>${itemsHtml}</div>
+                <div style="margin-top:30px; display:flex; justify-content:space-between; align-items:center; background:#0f172a; padding:25px; border-radius:20px;">
+                    <span style="font-size:14px; font-weight:800; color:#94a3b8; text-transform:uppercase; letter-spacing:2px;">Total del Pedido:</span>
+                    <span style="font-size:32px; font-weight:900; color:#ffffff;">$${total.toLocaleString('en-US', {minimumFractionDigits: 2})}</span>
+                </div>
+                <div style="margin-top:30px; text-align:center;">
+                    <p style="font-size:11px; font-weight:700; color:#cbd5e1; text-transform:uppercase; letter-spacing:1px;">Generado el: ${new Date().toLocaleString()}</p>
+                </div>
+            `;
+
+            document.body.appendChild(poster);
+
+            try {
+                const canvas = await html2canvas(poster, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+                const link = document.createElement('a');
+                link.download = `Pedido_Starphone_${new Date().getTime()}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            } catch (err) {
+                alert('No se pudo generar la imagen');
+            } finally {
+                document.body.removeChild(poster);
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        // ============================================================
+        //  PDF CATÁLOGO
+        // ============================================================
+        async function downloadProductCatalogPDF() {
+            vibrate();
+            const { jsPDF } = window.jspdf;
+
+            const filtered = products.filter(p => {
+                const { keyword, MARCA, CATEGORIA, TIPO } = activeFilters;
+                const matchKeyword = !keyword || (p.PRODUCTO + (p.MARCA || '') + (p.CATEGORIA || '') + (p.TIPO || '') + (p[
+                    '新到货'] || '')).toUpperCase().includes(keyword.toUpperCase());
+                return matchKeyword &&
+                    (!MARCA || p.MARCA === MARCA) &&
+                    (!CATEGORIA || p.CATEGORIA === CATEGORIA) &&
+                    (!TIPO || p.TIPO === TIPO);
+            });
+
+            if (filtered.length === 0) return alert('No hay productos');
+
+            const container = document.createElement('div');
+            container.style.cssText =
+                "position:absolute; top:0; left:-2000px; width:800px; background:white; padding:30px; display:block;";
+
+            let html = `
+                <div style="border-bottom:5px solid #0f172a; padding-bottom:20px; margin-bottom:30px; display:flex; justify-content:space-between; align-items:flex-end;">
+                    <div>
+                        <h1 style="font-size:42px; font-weight:900; color:#0f172a; margin:0;">STARPHONE</h1>
+                        <p style="font-size:14px; font-weight:800; color:#2563eb; margin:5px 0 0 0; text-transform:uppercase; letter-spacing:3px;">Catálogo Completo</p>
+                    </div>
+                    <div style="text-align:right; font-size:12px; color:#64748b; font-weight:700;">Total: ${filtered.length} items</div>
+                </div>
+                <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+            `;
+
+            filtered.forEach(p => {
+                const imgUrl = p.Imagen_Path ? encodeURI(p.Imagen_Path.replace(/\\/g, '/')) : '';
+                html += `
+                    <div style="border:1px solid #f1f5f9; border-radius:15px; padding:15px; display:flex; align-items:center; gap:15px; background:white; page-break-inside:avoid;">
+                        <img src="${imgUrl}" style="width:80px; height:80px; object-fit:contain; border-radius:10px;" onerror="this.src='https://via.placeholder.com/80?text=Starphone'">
+                        <div style="flex:1;">
+                            <p style="font-size:10px; font-weight:800; color:#6366f1; margin:0; text-transform:uppercase;">${escapeHtml(p.MARCA || '')}</p>
+                            <h4 style="font-size:12px; font-weight:800; color:#0f172a; margin:4px 0; line-height:1.2;">${escapeHtml(p.PRODUCTO)}</h4>
+                            <p style="font-size:10px; color:#64748b; margin:0;">${escapeHtml(p.CATEGORIA || '')}</p>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `</div>`;
+            container.innerHTML = html;
+            document.body.appendChild(container);
+
+            await new Promise(resolve => setTimeout(resolve, 1500));
+
+            try {
+                const canvas = await html2canvas(container, {
+                    scale: 2,
+                    useCORS: true,
+                    allowTaint: true,
+                    height: container.scrollHeight,
+                    windowHeight: container.scrollHeight
+                });
+                const imgData = canvas.toDataURL('image/jpeg', 0.8);
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+                const customPdf = new jsPDF('p', 'mm', [pdfWidth, pdfHeight]);
+                customPdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+                customPdf.save(`Starphone_Catalogo_${new Date().getTime()}.pdf`);
+            } catch (err) {
+                console.error(err);
+                alert('Error al generar PDF');
+            } finally {
+                document.body.removeChild(container);
+            }
+        }
+
+        // ============================================================
+        //  VIDEO MODAL
+        // ============================================================
+        function openVideoModal(url) {
+            if (!url || url.trim() === '') return;
+            const modal = document.getElementById('videoModal');
+            const frame = document.getElementById('videoFrame');
+            const waBtn = document.getElementById('waShareBtn');
+
+            const embedData = getEmbedUrl(url);
+            frame.src = embedData.url;
+
+            const container = frame.parentElement;
+            if (url.includes('tiktok.com') || url.includes('shorts') || url.includes('instagram.com')) {
+                container.style.height = '75vh';
+            } else {
+                container.style.height = '55vh';
+            }
+
+            waBtn.href = `https://wa.me/?text=Mira este video: ${encodeURIComponent(url)}`;
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeVideoModal() {
+            const modal = document.getElementById('videoModal');
+            modal.classList.remove('show');
+            document.getElementById('videoFrame').src = '';
+            document.body.style.overflow = '';
+        }
+
+        function getEmbedUrl(url) {
+            const trimUrl = url.trim();
+            if (trimUrl.includes('youtube.com') || trimUrl.includes('youtu.be')) {
+                const id = extractYoutubeId(trimUrl);
+                return { url: `https://www.youtube.com/embed/${id}?autoplay=1&rel=0` };
+            }
+            if (trimUrl.includes('vimeo.com')) {
+                const id = trimUrl.match(/vimeo\.com\/(\d+)/)?.[1];
+                if (id) return { url: `https://player.vimeo.com/video/${id}?autoplay=1` };
+            }
+            if (trimUrl.includes('facebook.com') || trimUrl.includes('fb.com')) {
+                return { url: `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(trimUrl)}&show_text=0&width=500` };
+            }
+            if (trimUrl.includes('instagram.com')) {
+                const base = trimUrl.split('?')[0].replace(/\/$/, '');
+                return { url: `${base}/embed/` };
+            }
+            if (trimUrl.includes('tiktok.com')) {
+                const id = trimUrl.split('/').pop().split('?')[0];
+                return { url: `https://www.tiktok.com/embed/${id}` };
+            }
+            if (trimUrl.match(/\.(mp4|webm|ogv|mov)$/i)) {
+                return { url: `data:text/html,<body style="margin:0;background:black;"><video width="100%" height="100%" controls autoplay style="object-fit:contain;"><source src="${trimUrl}" type="video/mp4"></video></body>` };
+            }
+            return { url: trimUrl };
+        }
+
+        function extractYoutubeId(url) {
+            const patterns = [
+                /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/,
+                /youtube\.com\/watch\?.*v=([^&\n?#]+)/,
+                /youtu\.be\/([^?]+)/
+            ];
+            for (const pattern of patterns) {
+                const match = url.match(pattern);
+                if (match && match[1]) return match[1];
+            }
+            return '';
+        }
+
+        // ============================================================
+        //  DARK MODE / VIBRATION
+        // ============================================================
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark');
+            const isDark = document.body.classList.contains('dark');
+            localStorage.setItem('starphone_dark', isDark);
+            const checkbox = document.getElementById('dark-mode-toggle');
+            if (checkbox) checkbox.checked = isDark;
+            vibrate();
+        }
+
+        function toggleVibration() {
+            isVibrationEnabled = document.getElementById('vibration-toggle').checked;
+            localStorage.setItem('vibration_enabled', isVibrationEnabled);
+            if (isVibrationEnabled) vibrate();
+        }
+
+        // ============================================================
+        //  ANUNCIO
+        // ============================================================
+        function hideAnnouncement() {
+            document.getElementById('update-announcement').classList.remove('show');
+        }
+
+        // ============================================================
+        //  KEYBOARD SHORTCUTS
+        // ============================================================
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeAllModals();
+                closeVideoModal();
+            }
+            if (e.key === '/' && document.activeElement.tagName !== 'INPUT') {
+                e.preventDefault();
+                document.getElementById('search').focus();
+            }
+        });
+
+        // ============================================================
+        //  INICIO
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
