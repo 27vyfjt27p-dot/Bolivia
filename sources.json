@@ -1,11 +1,5 @@
 [
   {
-    "key": "bomidi,solohour",
-    "label": "BOMIDI,SOLOHOUR",
-    "desc": "BOMIDI,SOLOHOUR",
-    "file": "BOMIDI,SOLOHOUR.json"
-  },
-  {
     "key": "productos",
     "label": "PRODUCTOS",
     "desc": "Productos",
