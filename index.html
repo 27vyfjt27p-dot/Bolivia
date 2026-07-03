@@ -426,17 +426,9 @@ body.dark .favorite-mode-banner {
         </div>
 
         <div class="flex flex-col gap-2">
-            <div class="flex gap-2">
-                <button onclick="generateOrderPoster(event)" class="flex-1 bg-white border-2 border-slate-900 text-slate-900 py-2.5 rounded-2xl font-black uppercase text-[9px] flex items-center justify-center gap-2 hover:bg-slate-900 hover:text-white transition-all active:scale-95 shadow-sm">
-                    📸 <span>Generar Imagen de Pedido</span>
-                </button>
-                
-                <div class="grid grid-cols-3 gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-2xl w-auto shrink-0">
-                    <button id="btn-contact-0" onclick="selectContact(0)" class="py-1.5 px-3 rounded-xl text-[10px] font-black transition-all bg-blue-600 text-white shadow-sm">AXIN</button>
-                    <button id="btn-contact-1" onclick="selectContact(1)" class="py-1.5 px-3 rounded-xl text-[10px] font-bold transition-all bg-transparent text-slate-400">IVAN</button>
-                    <button id="btn-contact-2" onclick="selectContact(2)" class="py-1.5 px-3 rounded-xl text-[10px] font-bold transition-all bg-transparent text-slate-400">MARIA</button>
-                </div>
-            </div>
+            <button onclick="generateOrderPoster(event)" class="w-full bg-white border-2 border-slate-900 text-slate-900 py-2.5 rounded-2xl font-black uppercase text-[9px] flex items-center justify-center gap-2 hover:bg-slate-900 hover:text-white transition-all active:scale-95 shadow-sm">
+                📸 <span>Generar Imagen de Pedido</span>
+            </button>
 
             <button onclick="copyOrderToClipboard()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black uppercase shadow-lg text-sm hover:bg-blue-700 transition-all active:scale-[0.98]">
                 📋 Copiar Pedido
@@ -517,13 +509,7 @@ body.dark .favorite-mode-banner {
 }
         let products = [], cart = {}, productNotes = {}, favorites = {}, sources = [], currentSourceKey = null;
        
-        let activeContactIndex = 0;
         let isFavoriteMode = false; /* 补丁：收藏模式开关 */
-        const CONTACTS = [
-    {name: "AXIN", phone: "56926108498"}, 
-    {name: "IVAN", phone: "59168043587"},
-    {name: "MARIA", phone: "56944611255"}, // 新增销售 1
-];
         let activeFilters = { keyword: "", MARCA: null, CATEGORIA: null, TIPO: null, priceRange: null };
         let announcementTimer; 
 
@@ -744,7 +730,6 @@ async function loadProducts() {
         resetFilters(false); 
         renderFilters(); 
         render(); 
-        selectContact(0);
     } catch(e) { 
         console.error("Error:", e); 
     }
@@ -1038,19 +1023,6 @@ function saveToLocal() {
         }
 
         function toggleMenu() { vibrate(); const menu = document.getElementById('filter-menu'); menu.classList.toggle('translate-x-full'); document.getElementById('modal-overlay').classList.toggle('hidden', menu.classList.contains('translate-x-full')); }
-        function selectContact(i) { 
-    vibrate(); 
-    activeContactIndex = i; 
-    // 将写死的 [0,1] 修改为遍历 CONTACTS 数组的所有索引
-    CONTACTS.forEach((_, idx) => {
-        const btn = document.getElementById(`btn-contact-${idx}`);
-        if (btn) {
-            btn.className = idx === i 
-                ? "flex-1 py-3 rounded-full text-[10px] font-black bg-blue-600 text-white shadow-md" 
-                : "flex-1 py-3 rounded-full text-[10px] font-bold bg-transparent text-slate-400";
-        }
-    }); 
-}   
         
         // --- 3. 渲染清单：增加下架检测 ---
 // --- 补丁 1：修改 refreshCartModal 函数中的循环部分 ---
